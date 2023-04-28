@@ -10,12 +10,11 @@ public class FloorAnchor : MonoBehaviour
     [SerializeField] public Transform rightHand;
     [SerializeField] private GameObject wallPrefab;
     [SerializeField] public GameObject wallParent;
-    [SerializeField] public float unit = 5f;
+    [SerializeField] public float unit = 0.5f;
     private Image image;
     public bool anchorOn, wallAnchorOn, finishAnchor = false;
     private bool wallTrigger = true;
-    private float scale = 0.1f;
-    private float bound = 100f;
+    private float bound = 10f;
 
     void Start()
     {
@@ -45,14 +44,14 @@ public class FloorAnchor : MonoBehaviour
             if (front.y < 0) {
                 image.enabled = true;
 
-                float k = (-1 - pos.y) / front.y;
-                float x = Mathf.Clamp((pos.x + k*front.x)/scale, -bound, bound);
-                float y = Mathf.Clamp((pos.z + k*front.z)/scale, -bound, bound);
+                float k = (-0.01f - pos.y) / front.y;
+                float x = Mathf.Clamp((pos.x + k*front.x), -bound, bound);
+                float z = Mathf.Clamp((pos.z + k*front.z), -bound, bound);
 
                 x = unit * Mathf.Round(x / unit);
-                y = unit * Mathf.Round(y / unit);
+                z = unit * Mathf.Round(z / unit);
 
-                GetComponent<RectTransform>().anchoredPosition = new Vector2(x, y);
+                transform.position = new Vector3(x, 0.01f, z);
             }
             else {
                 image.enabled = false;

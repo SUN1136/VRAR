@@ -7,10 +7,14 @@ public class InputLinker : MonoBehaviour
     [SerializeField] private bool debug;
     public bool leftTrigger, rightTrigger = false;
     public float leftTriggerValue, rightTriggerValue = 0f;
+    public bool rightTriggerDrag = false;
     public bool leftGrab, rightGrab = false;
     public float leftGrabValue, rightGrabValue = 0f;
     public bool leftX, leftY, rightA, rightB = false;
     public Vector2 leftJoy, rightJoy = new Vector2(0f, 0f);
+
+    private float dragTimer = 0f;
+    [SerializeField] private float dragThres = 0.1f;
     
     void Start()
     {
@@ -43,6 +47,18 @@ public class InputLinker : MonoBehaviour
 
             leftJoy = OVRInput.Get(OVRInput.Axis2D.PrimaryThumbstick);
             rightJoy = OVRInput.Get(OVRInput.Axis2D.SecondaryThumbstick);
+        }
+
+        if (rightTrigger) {
+            dragTimer += Time.deltaTime;
+
+            if (dragTimer > dragThres) {
+                rightTriggerDrag = true;
+            }
+        }
+        else if (!rightTrigger && (dragTimer > 0f)) {
+            rightTriggerDrag = false;
+            dragTimer = 0f;
         }
     }
 }

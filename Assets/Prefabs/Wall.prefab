@@ -13,7 +13,7 @@ GameObject:
   - component: {fileID: 3453483079162972277}
   - component: {fileID: 47644445663684224}
   - component: {fileID: 3819700943416994928}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: Wall (1)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -111,6 +111,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 504a55376c36aa94dbf66f554884dbb8, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  passThrough: {fileID: 0}
   vertex1: {x: 0, y: 0, z: 0}
   vertex2: {x: 0, y: 0, z: 0}
   vertex3: {x: 0, y: 0, z: 0}
@@ -128,7 +129,7 @@ GameObject:
   - component: {fileID: 431506386851675305}
   - component: {fileID: 2066585445937030085}
   - component: {fileID: 7360928319237931863}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: Wall
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -227,6 +228,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 504a55376c36aa94dbf66f554884dbb8, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  passThrough: {fileID: 0}
   vertex1: {x: 0, y: 0, z: 0}
   vertex2: {x: 0, y: 0, z: 0}
   vertex3: {x: 0, y: 0, z: 0}

@@ -17,7 +17,7 @@ public class WallAnchor : MonoBehaviour
     private bool ActiveClicked = false;
     private float bound = 250f;
     private float scale = 5f;
-    public int rotState = 0;
+    public int rotState = 1;
     public Vector3 vertex1, vertex2, vertex3, vertex4;
     void Start()
     {
@@ -27,6 +27,13 @@ public class WallAnchor : MonoBehaviour
         wallParent = transform.parent.gameObject.GetComponent<FloorAnchor>().wallParent;
 
         transform.localPosition = new Vector3(0f, 0f, 0f);
+
+        if (rotState == 1) {
+            transform.rotation = Quaternion.Euler(0, 180, 0);
+        }
+        else {
+            transform.rotation = Quaternion.Euler(0, 90, 0);
+        }
     }
 
     void Update()
