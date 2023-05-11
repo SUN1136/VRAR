@@ -12,6 +12,7 @@ public class InputLinker : MonoBehaviour
     public float leftGrabValue, rightGrabValue = 0f;
     public bool leftX, leftY, rightA, rightB = false;
     public Vector2 leftJoy, rightJoy = new Vector2(0f, 0f);
+    public bool leftThumb, rightThumb = false;
 
     private float dragTimer = 0f;
     [SerializeField] private float dragThres = 0.1f;
@@ -47,6 +48,9 @@ public class InputLinker : MonoBehaviour
 
             leftJoy = OVRInput.Get(OVRInput.Axis2D.PrimaryThumbstick);
             rightJoy = OVRInput.Get(OVRInput.Axis2D.SecondaryThumbstick);
+
+            leftThumb = OVRInput.GetDown(OVRInput.Button.PrimaryThumbstick);
+            rightThumb = OVRInput.GetDown(OVRInput.Button.SecondaryThumbstick);
         }
 
         if (rightTrigger) {
