@@ -16,24 +16,50 @@ public class ColorRaycast : MonoBehaviour
     [SerializeField] private InputLinker inputLinker;
     [SerializeField] private LayerMask UIMask, FurnitureMask;
     
-    private Color[] colorList = {
-        new Color(234/255f, 50/255f, 35/255f, 1),
-        new Color(240/255f, 145/255f, 53/255f, 1),
-        new Color(246/255f, 192/255f, 66/255f, 1),
-        new Color(251/255f, 228/255f, 77/255f, 1),
-        new Color(51/255f, 253/255f, 84/255f, 1),
-        new Color(225/255f, 252/255f, 82/255f, 1),
-        new Color(194/255f, 251/255f, 80/255f, 1),
-        new Color(154/255f, 250/255f, 78/255f, 1),
-        new Color(117/255f, 250/255f, 108/255f, 1),
-        new Color(116/255f, 250/255f, 167/255f, 1),
-        new Color(116/255f, 250/255f, 208/255f, 1),
-        new Color(115/255f, 251/255f, 239/255f, 1),
+    private Color[] rgbColorList = {
+        new Color(224/255f, 123/255f, 57/255f, 1),
+        new Color(218/255f, 87/255f, 53/255f, 1),
+        new Color(214/255f, 55/255f, 51/255f, 1),
+        new Color(211/255f, 55/255f, 97/255f, 1),
+        new Color(208/255f, 51/255f, 138/255f, 1),
+
+        new Color(184/255f, 51/255f, 139/255f, 1),
+        new Color(149/255f, 53/255f, 137/255f, 1),
+        new Color(118/255f, 54/255f, 139/255f, 1),
+        new Color(69/255f, 56/255f, 140/255f, 1),
+        new Color(39/255f, 79/255f, 155/255f, 1),
+
+        new Color(56/255f, 114/255f, 178/255f, 1),
+        new Color(82/255f, 163/255f, 221/255f, 1),
+        new Color(86/255f, 176/255f, 129/255f, 1),
+        new Color(129/255f, 185/255f, 85/255f, 1),
+        new Color(150/255f, 192/255f, 84/255f, 1),
+
+        new Color(181/255f, 205/255f, 83/255f, 1),
+        new Color(248/255f, 234/255f, 84/255f, 1),
+        new Color(238/255f, 205/255f, 79/255f, 1),
+        new Color(229/255f, 171/255f, 73/255f, 1),
+        new Color(231/255f, 148/255f, 62/255f, 1),
     };
 
-    Color angle2color(float angle){
-        int index = (int)Math.Truncate((angle / 30));
-        return colorList[index];
+    private Color[] greyColorList = {
+        new Color(0/255f, 0/255f, 0/255f, 1),
+        new Color(166/255f, 166/255f, 166/255f, 1),
+        new Color(255/255f, 255/255f, 255/255f, 1),
+    };
+
+
+    Color angle2colorRGB(float angle){
+        int index = (int)Math.Truncate((angle / 18));
+        return rgbColorList[index];
+    }
+
+    Color angle2colorGrey(float angle){
+        if (angle < 90){
+            angle = 360 + angle;
+        }
+        int index = (int)Math.Truncate(((angle - 90) / 120));
+        return greyColorList[index];
     }
 
     void Start()
@@ -55,12 +81,20 @@ public class ColorRaycast : MonoBehaviour
                     Vector3 direction_x_axis = colorCanvas.transform.right;
                     Vector3 direction_z_axis = colorCanvas.transform.forward;
                     Vector3 direction = hit.point - colorCanvas.transform.position;
-    
+
                     float theta = Mathf.Rad2Deg * Mathf.Acos(Vector3.Dot(direction_x_axis, direction) / (direction.magnitude * direction_x_axis.magnitude));
                     bool isPositiveAngle = Vector3.Dot(Vector3.Cross(direction_x_axis, direction), direction_z_axis) > 0;
 
                     theta = isPositiveAngle ? theta : 360 - theta;
-                    colorHold = angle2color(theta);
+
+                    Debug.Log(direction.magnitude);
+                    
+                    if (direction.magnitude < 0.5 * 0.51282051282){
+                        colorHold = angle2colorGrey(theta);
+                    }
+                    else if (direction.magnitude >= 0.5 * 0.51282051282 && direction.magnitude < 0.5){
+                        colorHold = angle2colorRGB(theta);
+                    }
                 }
                 
                 Vector3 v1 = transform.position;

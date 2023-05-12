@@ -6,8 +6,11 @@ public class InteriorUI : MonoBehaviour
 {
     [SerializeField] private InputLinker inputLinker;
     [SerializeField] private GameObject leftHandAnchor;
+    public GameObject canvas;
     public GameObject panel;
-    private bool panelActive = false;
+    public GameObject colorPalette;
+    // private bool panelActive = false;
+    private bool canvasButtonClicked = false;
     private bool buttonClicked = false;
     private Vector3 offset;
 
@@ -18,27 +21,32 @@ public class InteriorUI : MonoBehaviour
     }
     void Update()
     {
-        // Set the position of the object to be the same as the position of the LeftHandAnchor game object
-        panel.transform.position = leftHandAnchor.transform.position - offset;
-
-        // Set the rotation of the object to be the same as the rotation of the LeftHandAnchor game object
-        panel.transform.rotation = leftHandAnchor.transform.rotation;
-
-        if (inputLinker.leftX && !buttonClicked)
-        {
-            if (!panelActive)
-            {
-                panel.SetActive(true);
-                panelActive = true;
+        if (inputLinker.leftTrigger && !canvasButtonClicked){
+            canvasButtonClicked = true;
+            if (canvas.activeSelf){
+                canvas.SetActive(false);
             }
-            else
-            {
-                panel.SetActive(false);
-                panelActive = false;
+            else {
+                canvas.SetActive(true);
             }
-            buttonClicked = true;
         }
-        if (buttonClicked && !inputLinker.leftX)
+        else if (canvasButtonClicked && !inputLinker.leftTrigger) {
+            canvasButtonClicked = false;
+        }
+
+
+        if (inputLinker.leftX && !buttonClicked){
+            buttonClicked = true;
+            if (panel.activeSelf){
+                panel.SetActive(false);
+                colorPalette.SetActive(true);
+            }
+            else{
+                panel.SetActive(true);
+                colorPalette.SetActive(false);
+            }
+        }
+        else if (buttonClicked && !inputLinker.leftX)
             buttonClicked = false;
     }
 }
