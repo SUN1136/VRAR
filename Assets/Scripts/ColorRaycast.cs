@@ -11,10 +11,12 @@ public class ColorRaycast : MonoBehaviour
     public float delay = 0.1f;
     public Material lineMaterial;
     [SerializeField] private GameObject colorPalette;
-    [SerializeField] private bool existColor = false;
+    [SerializeField] private GameObject colorCanvas;
     [SerializeField] private Color colorHold = Color.clear;
     [SerializeField] private InputLinker inputLinker;
     [SerializeField] private LayerMask UIMask, FurnitureMask;
+    [SerializeField] private bool showLine = false;
+    [SerializeField] private RaycastMode mode;
     
     private Color[] rgbColorList = {
         new Color(224/255f, 123/255f, 57/255f, 1),
@@ -70,10 +72,8 @@ public class ColorRaycast : MonoBehaviour
     void Update()
     {
         RaycastHit hit;
-        GameObject colorPalette = GameObject.Find("ColorPalette");
-        GameObject colorCanvas = GameObject.Find("ColorCanvas");
 
-        if (true){
+        if (!mode.existObject){
             Ray ray = new Ray(transform.position, transform.forward);
 
             if (Physics.Raycast(ray, out hit, rayLength * 10, UIMask)){ // Collision Exists
@@ -99,18 +99,20 @@ public class ColorRaycast : MonoBehaviour
                 
                 Vector3 v1 = transform.position;
                 v1 = transform.TransformPoint(Vector3.forward * rayLength);
+                
+                if (showLine) {
+                    GameObject myLine = new GameObject();
+                    myLine.transform.position = transform.position;
+                    myLine.AddComponent<LineRenderer>();
 
-                GameObject myLine = new GameObject();
-                myLine.transform.position = transform.position;
-                myLine.AddComponent<LineRenderer>();
-
-                LineRenderer lr = myLine.GetComponent<LineRenderer>();
-                lr.material = lineMaterial;
-                lr.startWidth = 0.01f;
-                lr.endWidth = 0.01f;
-                lr.SetPosition(0, transform.position);
-                lr.SetPosition(1, hit.point);
-                GameObject.Destroy(myLine, delay);
+                    LineRenderer lr = myLine.GetComponent<LineRenderer>();
+                    lr.material = lineMaterial;
+                    lr.startWidth = 0.01f;
+                    lr.endWidth = 0.01f;
+                    lr.SetPosition(0, transform.position);
+                    lr.SetPosition(1, hit.point);
+                    GameObject.Destroy(myLine, delay);
+                }
             }
             else if (Physics.Raycast(ray, out hit, rayLength * 10, FurnitureMask)){
                 if (!inputLinker.rightTrigger && colorHold != Color.clear){
@@ -123,38 +125,50 @@ public class ColorRaycast : MonoBehaviour
                 Vector3 v1 = transform.position;
                 v1 = transform.TransformPoint(Vector3.forward * rayLength);
 
-                GameObject myLine = new GameObject();
-                myLine.transform.position = transform.position;
-                myLine.AddComponent<LineRenderer>();
+                if (showLine) {
+                    GameObject myLine = new GameObject();
+                    myLine.transform.position = transform.position;
+                    myLine.AddComponent<LineRenderer>();
 
-                LineRenderer lr = myLine.GetComponent<LineRenderer>();
-                lr.material = lineMaterial;
-                lr.startWidth = 0.01f;
-                lr.endWidth = 0.01f;
-                lr.SetPosition(0, transform.position);
-                lr.SetPosition(1, hit.point);
-                GameObject.Destroy(myLine, delay);
+                    LineRenderer lr = myLine.GetComponent<LineRenderer>();
+                    lr.material = lineMaterial;
+                    lr.startWidth = 0.01f;
+                    lr.endWidth = 0.01f;
+                    lr.SetPosition(0, transform.position);
+                    lr.SetPosition(1, hit.point);
+                    GameObject.Destroy(myLine, delay);
+                }
             }
             else { // No Collision
-                if (!inputLinker.rightTrigger){
-                    colorHold = Color.clear;
-                }
 
                 Vector3 v1 = transform.position;
                 v1 = transform.TransformPoint(Vector3.forward * rayLength);
 
-                GameObject myLine = new GameObject();
-                myLine.transform.position = transform.position;
-                myLine.AddComponent<LineRenderer>();
+                if (showLine) {
+                    GameObject myLine = new GameObject();
+                    myLine.transform.position = transform.position;
+                    myLine.AddComponent<LineRenderer>();
 
-                LineRenderer lr = myLine.GetComponent<LineRenderer>();
-                lr.material = lineMaterial;
-                lr.startWidth = 0.01f;
-                lr.endWidth = 0.01f;
-                lr.SetPosition(0, transform.position);
-                lr.SetPosition(1, v1);
-                GameObject.Destroy(myLine, delay);
+                    LineRenderer lr = myLine.GetComponent<LineRenderer>();
+                    lr.material = lineMaterial;
+                    lr.startWidth = 0.01f;
+                    lr.endWidth = 0.01f;
+                    lr.SetPosition(0, transform.position);
+                    lr.SetPosition(1, v1);
+                    GameObject.Destroy(myLine, delay);
+                }
             }
+
+            if (!inputLinker.rightTrigger){
+                colorHold = Color.clear;
+            }
+        }
+
+        if (colorHold == Color.clear) {
+            mode.existColor = false;
+        }
+        else {
+            mode.existColor = true;
         }
     }
 }

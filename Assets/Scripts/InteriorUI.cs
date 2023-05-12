@@ -13,6 +13,7 @@ public class InteriorUI : MonoBehaviour
     private bool canvasButtonClicked = false;
     private bool buttonClicked = false;
     private Vector3 offset;
+    private bool uiOn = false;
 
     private void Start()
     {
@@ -25,9 +26,11 @@ public class InteriorUI : MonoBehaviour
             canvasButtonClicked = true;
             if (canvas.activeSelf){
                 canvas.SetActive(false);
+                uiOn = false;
             }
             else {
                 canvas.SetActive(true);
+                uiOn = true;
             }
         }
         else if (canvasButtonClicked && !inputLinker.leftTrigger) {
@@ -35,18 +38,23 @@ public class InteriorUI : MonoBehaviour
         }
 
 
-        if (inputLinker.leftX && !buttonClicked){
-            buttonClicked = true;
-            if (panel.activeSelf){
-                panel.SetActive(false);
-                colorPalette.SetActive(true);
+        if (uiOn) {
+            if (inputLinker.leftX && !buttonClicked){
+                buttonClicked = true;
+                if (panel.activeSelf){
+                    panel.SetActive(false);
+                    colorPalette.SetActive(true);
+                }
+                else{
+                    panel.SetActive(true);
+                    colorPalette.SetActive(false);
+                }
             }
-            else{
-                panel.SetActive(true);
-                colorPalette.SetActive(false);
-            }
+            else if (buttonClicked && !inputLinker.leftX)
+                buttonClicked = false;
         }
-        else if (buttonClicked && !inputLinker.leftX)
+        else {
             buttonClicked = false;
+        }
     }
 }

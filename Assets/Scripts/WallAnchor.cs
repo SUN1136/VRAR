@@ -150,6 +150,13 @@ public class WallAnchor : MonoBehaviour
 
             wall.GetComponent<WallProperty>().passThrough = passThrough;
 
+            WallProperty wallChild = wall.transform.GetChild(0).gameObject.GetComponent<WallProperty>();
+            wallChild.vertex1 = vertex1;
+            wallChild.vertex2 = vertex2;
+            wallChild.vertex3 = vertex3;
+            wallChild.vertex4 = vertex4;
+            wallChild.passThrough = passThrough;
+
             transform.parent.gameObject.GetComponent<FloorAnchor>().finishAnchor = true;
             Destroy(gameObject);
         }
