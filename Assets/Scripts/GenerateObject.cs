@@ -10,6 +10,7 @@ public class GenerateObject : MonoBehaviour
     [SerializeField] private LayerMask mask;
     [SerializeField] private float unit = 0.25f;
     [SerializeField] private float rotUnit = 15f;
+    [SerializeField] private Transform furnitureParent;
     public GameObject[] objectPrefab;
     public GameObject objectToDrag;
     public bool Grabbed = false;
@@ -47,14 +48,14 @@ public class GenerateObject : MonoBehaviour
                     {
                         int idx = hit.collider.gameObject.GetComponent<ButtonIndex>().furnitureIdx;
                         distance = 2f;
-                        obj = Instantiate(objectPrefab[idx], transform.position + transform.forward * distance, Quaternion.identity);
+                        obj = Instantiate(objectPrefab[idx], transform.position + transform.forward * distance, Quaternion.identity, furnitureParent);
                         Grabbed = true;
                         rotAngle += 180;
                         objectToDrag = obj;
                     }
                     else if (hit.collider.gameObject.layer == 6)
                     {
-                        objectToDrag = hit.collider.gameObject;
+                        objectToDrag = hit.collider.gameObject.transform.parent.parent.gameObject;
                         rotAngle = objectToDrag.transform.eulerAngles.y;
                         distance = (objectToDrag.transform.position - transform.position).magnitude;
                         Grabbed = true;

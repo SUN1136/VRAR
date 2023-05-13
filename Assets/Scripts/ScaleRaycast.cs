@@ -26,12 +26,12 @@ public class ScaleRaycast : MonoBehaviour
 
         if (Physics.Raycast(rayObject, out hitDataObject, distance, objectMask)) {
 
-            if (hitDataObject.collider.gameObject.GetComponent<Scale>() != null) {
+            if (hitDataObject.collider.gameObject.layer == 6) {
                 dot.SetActive(true);
                 dot.transform.localPosition = new Vector3(0f, 0f, hitDataObject.distance);
                 dot.layer = 0;
                 if (!mode.existColor && !mode.existObject) {
-                    hitDataObject.collider.gameObject.GetComponent<Scale>().showScale = true;
+                    hitDataObject.collider.gameObject.transform.parent.parent.gameObject.GetComponent<Scale>().showScale = true;
                 } 
             }
             else if (hitDataObject.collider.gameObject.GetComponent<ScaleAxis>() != null) {
