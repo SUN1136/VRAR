@@ -36,25 +36,5 @@ public class InteriorUI : MonoBehaviour
         else if (canvasButtonClicked && !inputLinker.leftTrigger) {
             canvasButtonClicked = false;
         }
-
-
-        if (uiOn) {
-            if (inputLinker.leftX && !buttonClicked){
-                buttonClicked = true;
-                if (panel.activeSelf){
-                    panel.SetActive(false);
-                    colorPalette.SetActive(true);
-                }
-                else{
-                    panel.SetActive(true);
-                    colorPalette.SetActive(false);
-                }
-            }
-            else if (buttonClicked && !inputLinker.leftX)
-                buttonClicked = false;
-        }
-        else {
-            buttonClicked = false;
-        }
     }
 }

@@ -49,6 +49,8 @@ public class GenerateObject : MonoBehaviour
                         int idx = hit.collider.gameObject.GetComponent<ButtonIndex>().furnitureIdx;
                         distance = 2f;
                         obj = Instantiate(objectPrefab[idx], transform.position + transform.forward * distance, Quaternion.identity, furnitureParent);
+                        obj.layer = LayerMask.NameToLayer("Furniture");
+                     
                         Grabbed = true;
                         rotAngle += 180;
                         objectToDrag = obj;

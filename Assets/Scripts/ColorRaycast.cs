@@ -89,10 +89,11 @@ public class ColorRaycast : MonoBehaviour
 
                     Debug.Log(direction.magnitude);
                     
-                    if (direction.magnitude < 0.5 * 0.51282051282){
+                    if (direction.magnitude < 0.475 * 0.333 * 0.51282051282){
                         colorHold = angle2colorGrey(theta);
                     }
-                    else if (direction.magnitude >= 0.5 * 0.51282051282 && direction.magnitude < 0.5){
+                    else if (direction.magnitude >= 0.475 * 0.333 * 0.51282051282 && direction.magnitude < 0.475 * 0.333)
+                    {
                         colorHold = angle2colorRGB(theta);
                     }
                 }
