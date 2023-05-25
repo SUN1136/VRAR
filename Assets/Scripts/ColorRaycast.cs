@@ -13,6 +13,7 @@ public class ColorRaycast : MonoBehaviour
     [SerializeField] private GameObject colorPalette;
     [SerializeField] private GameObject colorCanvas;
     [SerializeField] private Color colorHold = Color.clear;
+    [SerializeField] private int? textureHold = null;
     [SerializeField] private InputLinker inputLinker;
     [SerializeField] private LayerMask UIMask, FurnitureMask;
     [SerializeField] private bool showLine = false;
@@ -64,6 +65,14 @@ public class ColorRaycast : MonoBehaviour
         return greyColorList[index];
     }
 
+    int angle2textureNum(float angle){
+        if (angle < 30){
+            angle = 360 + angle;
+        }
+        int index = (int)Math.Truncate(((angle - 30) / 120));
+        return index;
+    }
+
     void Start()
     {
         
@@ -77,7 +86,7 @@ public class ColorRaycast : MonoBehaviour
             Ray ray = new Ray(transform.position, transform.forward);
 
             if (Physics.Raycast(ray, out hit, rayLength * 10, UIMask)){ // Collision Exists
-                if (hit.collider == colorPalette.GetComponent<Collider>() && inputLinker.rightTrigger && colorHold == Color.clear){
+                if (hit.collider == colorPalette.GetComponent<Collider>() && inputLinker.rightTrigger && colorHold == Color.clear && textureHold == null){
                     Vector3 direction_x_axis = colorCanvas.transform.right;
                     Vector3 direction_z_axis = colorCanvas.transform.forward;
                     Vector3 direction = hit.point - colorCanvas.transform.position;
@@ -89,7 +98,10 @@ public class ColorRaycast : MonoBehaviour
 
                     Debug.Log(direction.magnitude);
                     
-                    if (direction.magnitude < 0.475 * 0.333 * 0.51282051282){
+                    if (direction.magnitude < 0.475 * 0.333 * 0.2624671916){
+                        textureHold = angle2textureNum(theta);
+                    }
+                    else if (direction.magnitude < 0.475 * 0.333 * 0.51282051282){
                         colorHold = angle2colorGrey(theta);
                     }
                     else if (direction.magnitude >= 0.475 * 0.333 * 0.51282051282 && direction.magnitude < 0.475 * 0.333)
@@ -116,11 +128,24 @@ public class ColorRaycast : MonoBehaviour
                 }
             }
             else if (Physics.Raycast(ray, out hit, rayLength * 10, FurnitureMask)){
-                if (!inputLinker.rightTrigger && colorHold != Color.clear){
+                if (!inputLinker.rightTrigger && (colorHold != Color.clear || textureHold != null)){
                     Renderer renderer = hit.collider.gameObject.GetComponent<MeshRenderer>();
-                    renderer.material = new Material(shader: Shader.Find("Diffuse"));
-                    renderer.material.color = colorHold;
-                    colorHold = Color.clear;
+                    if (colorHold != Color.clear){
+                        renderer.material = new Material(shader: Shader.Find("Diffuse"));
+                        renderer.material.color = colorHold;
+                        colorHold = Color.clear;
+                    }
+                    else {
+                        GameObject furniture = hit.collider.gameObject.transform.parent.gameObject;
+                        Material textureMaterial = (Material)Resources.Load("Materials/" + furniture.name + "_" + textureHold.ToString(), typeof(Material));
+                        
+                        for (int i=0; i< furniture.transform.childCount; i++) {
+                            GameObject child = furniture.transform.GetChild(i).gameObject;
+                            child.GetComponent<MeshRenderer>().material = textureMaterial;
+                        }
+
+                        textureHold = null;
+                    }
                 }
 
                 Vector3 v1 = transform.position;
@@ -162,10 +187,11 @@ public class ColorRaycast : MonoBehaviour
 
             if (!inputLinker.rightTrigger){
                 colorHold = Color.clear;
+                textureHold = null;
             }
         }
 
-        if (colorHold == Color.clear) {
+        if (colorHold == Color.clear && textureHold == null) {
             mode.existColor = false;
         }
         else {
