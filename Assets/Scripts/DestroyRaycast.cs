@@ -21,7 +21,12 @@ public class DestroyRaycast : MonoBehaviour
         if (Physics.Raycast(ray, out hitData, distance, mask)) {
             if (inputLinker.rightThumb && !destroyed) {
                 destroyed = true;
-                Destroy(hitData.collider.gameObject);
+                if (hitData.collider.gameObject.layer == 6) {
+                    Destroy(hitData.collider.gameObject.transform.parent.parent.gameObject);
+                }
+                else {
+                    Destroy(hitData.collider.gameObject);
+                }
             }
             else if (!inputLinker.rightThumb && destroyed) {
                 destroyed = false;

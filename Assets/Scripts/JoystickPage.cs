@@ -15,7 +15,7 @@ public class JoystickPage : MonoBehaviour
     void Start()
     {
         unitAngle = 360f / pageNum;
-        if (pageNum % 2 != 0) {
+        if (pageNum % 2 == 0) {
             offset = 90f;
         }
         else {

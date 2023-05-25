@@ -29,7 +29,6 @@ public class ScaleRaycast : MonoBehaviour
             if (hitDataObject.collider.gameObject.layer == 6) {
                 dot.SetActive(true);
                 dot.transform.localPosition = new Vector3(0f, 0f, hitDataObject.distance);
-                dot.layer = 0;
                 if (!mode.existColor && !mode.existObject) {
                     hitDataObject.collider.gameObject.transform.parent.parent.gameObject.GetComponent<Scale>().showScale = true;
                 } 
@@ -42,7 +41,6 @@ public class ScaleRaycast : MonoBehaviour
             else {
                 dot.SetActive(true);
                 dot.transform.localPosition = new Vector3(0f, 0f, hitDataObject.distance);
-                dot.layer = 0;
             }
 
             line.SetPosition(0, transform.position + transform.forward * 0.07f);
@@ -59,7 +57,6 @@ public class ScaleRaycast : MonoBehaviour
         if (Physics.Raycast(rayScale, out hitDataScale, distance, scaleMask)) {
             dot.SetActive(true);
             dot.transform.localPosition = new Vector3(0f, 0f, hitDataScale.distance);
-            dot.layer = 8;
 
             line.SetPosition(0, transform.position + transform.forward * 0.07f);
             line.SetPosition(1, transform.position + transform.forward * hitDataScale.distance);

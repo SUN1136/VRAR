@@ -11,7 +11,6 @@ GameObject:
   - component: {fileID: 6676688075023707220}
   - component: {fileID: 8802900780273653230}
   - component: {fileID: 3453483079162972277}
-  - component: {fileID: 47644445663684224}
   - component: {fileID: 3819700943416994928}
   m_Layer: 7
   m_Name: Wall (1)
@@ -85,20 +84,6 @@ MeshRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_AdditionalVertexStreams: {fileID: 0}
---- !u!64 &47644445663684224
-MeshCollider:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 500146508536574985}
-  m_Material: {fileID: 0}
-  m_IsTrigger: 0
-  m_Enabled: 1
-  serializedVersion: 4
-  m_Convex: 0
-  m_CookingOptions: 30
-  m_Mesh: {fileID: 10209, guid: 0000000000000000e000000000000000, type: 0}
 --- !u!114 &3819700943416994928
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -127,8 +112,8 @@ GameObject:
   - component: {fileID: 4812172067403432258}
   - component: {fileID: 2571196673800947508}
   - component: {fileID: 431506386851675305}
-  - component: {fileID: 2066585445937030085}
   - component: {fileID: 7360928319237931863}
+  - component: {fileID: 645592174220101233}
   m_Layer: 7
   m_Name: Wall
   m_TagString: Untagged
@@ -202,20 +187,6 @@ MeshRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_AdditionalVertexStreams: {fileID: 0}
---- !u!64 &2066585445937030085
-MeshCollider:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 6072144401258080481}
-  m_Material: {fileID: 0}
-  m_IsTrigger: 0
-  m_Enabled: 1
-  serializedVersion: 4
-  m_Convex: 0
-  m_CookingOptions: 30
-  m_Mesh: {fileID: 10209, guid: 0000000000000000e000000000000000, type: 0}
 --- !u!114 &7360928319237931863
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -233,3 +204,16 @@ MonoBehaviour:
   vertex2: {x: 0, y: 0, z: 0}
   vertex3: {x: 0, y: 0, z: 0}
   vertex4: {x: 0, y: 0, z: 0}
+--- !u!65 &645592174220101233
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6072144401258080481}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Size: {x: 10, y: 0.01, z: 10}
+  m_Center: {x: 0, y: 0, z: 0}

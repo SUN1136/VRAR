@@ -134,7 +134,7 @@ public class WallAnchor : MonoBehaviour
             }
             else {
                 wall.transform.position = transform.position + new Vector3(-x/(2f*scale), y/(2f*scale), 0f);
-                wall.transform.localScale = new Vector3(Mathf.Abs(x/(10f*scale)), 4f, y/(10f*scale));
+                wall.transform.localScale = new Vector3(Mathf.Abs(x/(10f*scale)), 1f, y/(10f*scale));
                 wall.transform.rotation = Quaternion.Euler(90, 180, 0);
 
                 vertex1 = transform.position;
