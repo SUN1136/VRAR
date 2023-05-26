@@ -14,6 +14,8 @@ public class GenerateObject : MonoBehaviour
     public GameObject[] objectPrefab;
     public GameObject objectToDrag;
     public bool Grabbed = false;
+    public bool xPrevious = false;
+    public bool yPrevious = false;
     public float moveSpeed = 0.01f;
     public float rotSpeed = 10000f;
     private float rotAngle = 0f;
@@ -47,10 +49,10 @@ public class GenerateObject : MonoBehaviour
                     if (hit.collider.gameObject.GetComponent<ButtonIndex>())
                     {
                         int idx = hit.collider.gameObject.GetComponent<ButtonIndex>().furnitureIdx;
-                        distance = 2f;
+                        distance = 1.4f;
                         obj = Instantiate(objectPrefab[idx], transform.position + transform.forward * distance, Quaternion.identity, furnitureParent);
                         obj.layer = LayerMask.NameToLayer("Furniture");
-                     
+ 
                         Grabbed = true;
                         rotAngle += 180;
                         objectToDrag = obj;
@@ -75,16 +77,35 @@ public class GenerateObject : MonoBehaviour
             }
             if (objectToDrag)
             {
-                distance += inputLinker.rightJoy.y * moveSpeed; // add movement in the y-axis based on joystick input
-                distance = Mathf.Clamp(distance, 0, 10);
-                Vector3 newPosition = transform.position + transform.forward * distance;
-                rotAngle += inputLinker.rightJoy.x * rotSpeed * Time.deltaTime;
-                float tmpAngle = Mathf.Round(rotAngle / rotUnit);
-                Debug.Log(rotAngle);
-                Quaternion newRotation = Quaternion.Euler(0f, tmpAngle * rotUnit, 0f);
-                // Set the position and rotation of the object to match the controller's position and rotation
-                objectToDrag.transform.position = new Vector3(Mathf.Round(newPosition.x / unit) * unit , Mathf.Clamp(Mathf.Round(newPosition.y / unit) * unit, 0, 10), Mathf.Round(newPosition.z / unit) * unit);
-                objectToDrag.transform.rotation = newRotation;
+                if (inputLinker.rightJoy.y > 0.7 || inputLinker.rightJoy.y < -0.7)
+                {
+                    if (yPrevious == false)
+                    {
+                        distance += unit;
+                        yPrevious = true;
+                    }
+                    distance += inputLinker.rightJoy.y * moveSpeed; // add movement in the y-axis based on joystick input
+                    distance = Mathf.Clamp(distance, 0, 10);
+                    Vector3 newPosition = transform.position + transform.forward * distance;
+                    objectToDrag.transform.position = new Vector3(Mathf.Round(newPosition.x / unit) * unit , Mathf.Clamp(Mathf.Round(newPosition.y / unit) * unit, 0, 10), Mathf.Round(newPosition.z / unit) * unit);
+           
+                }
+                else
+                    yPrevious = false;
+                if (inputLinker.rightJoy.x > 0.7 || inputLinker.rightJoy.x < -0.7)
+                {
+                    if (xPrevious == false)
+                    {
+                        rotAngle += rotUnit;
+                        xPrevious = true;
+                    }
+                    rotAngle += inputLinker.rightJoy.x * rotSpeed * Time.deltaTime;
+                    float tmpAngle = Mathf.Round(rotAngle / rotUnit);
+                    Quaternion newRotation = Quaternion.Euler(0f, tmpAngle * rotUnit, 0f);
+                    objectToDrag.transform.rotation = newRotation;
+                }
+                else
+                    xPrevious = false;
             }
         }
 

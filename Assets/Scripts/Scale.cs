@@ -12,6 +12,8 @@ public class Scale : MonoBehaviour
     public Vector3 defaultScale, scale;
     private Vector3 tmpScale;
     private float xUnit, yUnit, zUnit;
+    private int notShowCount = 0;
+    private bool realShow = false;
 
     void Start()
     {
@@ -24,16 +26,19 @@ public class Scale : MonoBehaviour
 
     void Update()
     {
-        tmpScale = defaultScale + new Vector3(xUnit*xScale, yUnit*yScale, zUnit*zScale);
-        if (tmpScale.x < xUnit) {
+        tmpScale = defaultScale + new Vector3(xUnit * xScale, yUnit * yScale, zUnit * zScale);
+        if (tmpScale.x < xUnit)
+        {
             tmpScale.x = xUnit;
             xScale = prevX;
         }
-        if (tmpScale.y < yUnit) {
+        if (tmpScale.y < yUnit)
+        {
             tmpScale.y = yUnit;
             yScale = prevY;
         }
-        if (tmpScale.z < zUnit) {
+        if (tmpScale.z < zUnit)
+        {
             tmpScale.z = zUnit;
             zScale = prevZ;
         }
@@ -44,13 +49,32 @@ public class Scale : MonoBehaviour
         prevY = yScale;
         prevZ = zScale;
 
-        if (!showScale) {
-            foreach (GameObject axis in axes) {
+        if (!showScale)
+        {
+            notShowCount++;
+            if (notShowCount > 10)
+            {
+                notShowCount = 0;
+                realShow = false;
+            }
+        }
+        else
+        {
+            notShowCount = 0;
+            realShow = true;
+        }
+
+        if (!realShow)
+        {
+            foreach (GameObject axis in axes)
+            {
                 axis.SetActive(false);
             }
         }
-        else if (showScale) {
-            foreach (GameObject axis in axes) {
+        else if (realShow)
+        {
+            foreach (GameObject axis in axes)
+            {
                 axis.SetActive(true);
             }
         }
