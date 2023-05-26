@@ -84,14 +84,16 @@ public class GenerateObject : MonoBehaviour
                         distance += unit;
                         yPrevious = true;
                     }
-                    distance += inputLinker.rightJoy.y * moveSpeed; // add movement in the y-axis based on joystick input
-                    distance = Mathf.Clamp(distance, 0, 10);
-                    Vector3 newPosition = transform.position + transform.forward * distance;
-                    objectToDrag.transform.position = new Vector3(Mathf.Round(newPosition.x / unit) * unit , Mathf.Clamp(Mathf.Round(newPosition.y / unit) * unit, 0, 10), Mathf.Round(newPosition.z / unit) * unit);
-           
                 }
-                else
+                else {
                     yPrevious = false;
+                }
+
+                distance += inputLinker.rightJoy.y * moveSpeed; // add movement in the y-axis based on joystick input
+                distance = Mathf.Clamp(distance, 0, 10);
+                Vector3 newPosition = transform.position + transform.forward * distance;
+                objectToDrag.transform.position = new Vector3(Mathf.Round(newPosition.x / unit) * unit , Mathf.Clamp(Mathf.Round(newPosition.y / unit) * unit, 0, 10), Mathf.Round(newPosition.z / unit) * unit);
+                
                 if (inputLinker.rightJoy.x > 0.7 || inputLinker.rightJoy.x < -0.7)
                 {
                     if (xPrevious == false)
@@ -99,13 +101,14 @@ public class GenerateObject : MonoBehaviour
                         rotAngle += rotUnit;
                         xPrevious = true;
                     }
-                    rotAngle += inputLinker.rightJoy.x * rotSpeed * Time.deltaTime;
-                    float tmpAngle = Mathf.Round(rotAngle / rotUnit);
-                    Quaternion newRotation = Quaternion.Euler(0f, tmpAngle * rotUnit, 0f);
-                    objectToDrag.transform.rotation = newRotation;
                 }
-                else
+                else {
                     xPrevious = false;
+                }
+                rotAngle += inputLinker.rightJoy.x * rotSpeed * Time.deltaTime;
+                float tmpAngle = Mathf.Round(rotAngle / rotUnit);
+                Quaternion newRotation = Quaternion.Euler(0f, tmpAngle * rotUnit, 0f);
+                objectToDrag.transform.rotation = newRotation;
             }
         }
 
