@@ -116,7 +116,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   wallAnchor: {fileID: 2067539671461898037}
   wallPrefab: {fileID: 6072144401258080481, guid: 8f8016b6956dda74e88dccb80af4bb1a, type: 3}
-  unit: 1.25
+  unit: 0.75
   passThrough: {fileID: 0}
   rotState: 1
   vertex1: {x: 0, y: 0, z: 0}

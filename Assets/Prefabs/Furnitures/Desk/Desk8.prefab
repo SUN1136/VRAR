@@ -96,7 +96,7 @@ CapsuleCollider:
   m_IsTrigger: 0
   m_Enabled: 1
   m_Radius: 0.5
-  m_Height: 2
+  m_Height: 2.5
   m_Direction: 1
   m_Center: {x: 0, y: 0, z: 0}
 --- !u!114 &5870778525995763186
@@ -213,7 +213,7 @@ CapsuleCollider:
   m_IsTrigger: 0
   m_Enabled: 1
   m_Radius: 0.5
-  m_Height: 2
+  m_Height: 2.5
   m_Direction: 1
   m_Center: {x: 0, y: 0, z: 0}
 --- !u!114 &3342790697849741979
@@ -364,7 +364,7 @@ CapsuleCollider:
   m_IsTrigger: 0
   m_Enabled: 1
   m_Radius: 0.5
-  m_Height: 2
+  m_Height: 2.5
   m_Direction: 1
   m_Center: {x: 0, y: 0, z: 0}
 --- !u!114 &8356462104221712250
@@ -435,7 +435,7 @@ MonoBehaviour:
   - {fileID: 181217328493665200}
   - {fileID: 5979417366522353410}
   - {fileID: 1743489985515592550}
-  scaleUnit: 0.25
+  scaleUnit: 0.15
   showScale: 0
   xScale: 0
   yScale: 0
