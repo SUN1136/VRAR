@@ -7,6 +7,7 @@ public class PassThrough : MonoBehaviour
     [SerializeField] private InputLinker inputLinker;
     [SerializeField] private OVRManager ovrManager;
     [SerializeField] private MeshRenderer[] objects;
+    [SerializeField] private Material skybox;
     public bool passThrough = false;
     private bool clicked = false;
     void Start()
@@ -23,6 +24,13 @@ public class PassThrough : MonoBehaviour
 
             foreach (MeshRenderer obj in objects) {
                 obj.enabled = !obj.enabled;
+            }
+
+            if (RenderSettings.skybox != null) {
+                RenderSettings.skybox = null;
+            }
+            else {
+                RenderSettings.skybox = skybox;
             }
         }
         else if (!inputLinker.leftGrab && clicked) {

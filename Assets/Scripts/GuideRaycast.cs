@@ -10,6 +10,7 @@ public class GuideRaycast : MonoBehaviour
     [SerializeField] private float distance = 10f;
     [SerializeField] private GameObject guideCanvas;
     [SerializeField] private GameObject guideButton;
+    [SerializeField] private GameObject quitButton;
     [SerializeField] private bool guideOn = true;
     private bool clicked = false;
 
@@ -34,14 +35,29 @@ public class GuideRaycast : MonoBehaviour
                         clicked = false;
                     }
                 }
+                else if (hitData.collider.gameObject == quitButton) {
+                    if (inputLinker.rightTrigger) {
+                        Quit();
+                    }
+                }
             }
         }
 
         if (guideOn) {
             guideCanvas.SetActive(true);
+            quitButton.SetActive(true);
         }
         else {
             guideCanvas.SetActive(false);
+            quitButton.SetActive(false);
         }
+    }
+
+    public void Quit() {
+        #if UNITY_EDITOR
+            UnityEditor.EditorApplication.isPlaying = false;
+        #else
+            Application.Quit();
+        #endif
     }
 }
