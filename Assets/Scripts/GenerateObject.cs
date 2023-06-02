@@ -12,14 +12,15 @@ public class GenerateObject : MonoBehaviour
     [SerializeField] private float rotUnit = 15f;
     [SerializeField] private Transform furnitureParent;
     public GameObject[] objectPrefab;
-    public GameObject objectToDrag;
-    public bool Grabbed = false;
-    public bool xPrevious = false;
-    public bool yPrevious = false;
-    public float moveSpeed = 0.01f;
-    public float rotSpeed = 10000f;
-    private float rotAngle = 0f;
-    private float distance = 2f;
+    public GameObject   objectToDrag;
+    public bool         isTriggered = false;
+    public bool         Grabbed = false;
+    public bool         xPrevious = false;
+    public bool         yPrevious = false;
+    public float        moveSpeed = 0.01f;
+    public float        rotSpeed = 10000f;
+    private float       rotAngle = 0f;
+    private float       distance = 2f;
 
     private LineRenderer line;
 
@@ -40,10 +41,11 @@ public class GenerateObject : MonoBehaviour
             // Raycast from the controller to get the intersection point
             RaycastHit hit;
 
+
             if (Physics.Raycast(rayObject, out hit, 10f, mask))
-            {
+            {           
                 Debug.Log("I hitted the ::::::::::::::::::: " + hit.collider.gameObject.name);
-                if (inputLinker.rightTrigger && Grabbed == false)
+                if (!isTriggered && inputLinker.rightTrigger && Grabbed == false)
                 {
                     GameObject obj = null;
                     if (hit.collider.gameObject.GetComponent<ButtonIndex>())
@@ -118,5 +120,7 @@ public class GenerateObject : MonoBehaviour
         else {
             mode.existObject = false;
         }
+
+        isTriggered = inputLinker.rightTrigger;
     }
 }

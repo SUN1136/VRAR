@@ -8,19 +8,21 @@ public class WallProperty : MonoBehaviour
     public Vector3 vertex1, vertex2, vertex3, vertex4;
     void Start()
     {
-        
+
     }
 
     void Update()
     {
-        if (passThrough.passThrough) {
+        if (passThrough.passThrough)
+        {
             Color color = GetComponent<MeshRenderer>().material.color;
             color.a = 0.25f;
             GetComponent<MeshRenderer>().material.color = color;
         }
-        else {
+        else
+        {
             Color color = GetComponent<MeshRenderer>().material.color;
-            color.a = 1f;
+            color.a = 0.4f;
             GetComponent<MeshRenderer>().material.color = color;
         }
     }

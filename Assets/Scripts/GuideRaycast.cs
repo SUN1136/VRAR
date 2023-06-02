@@ -8,6 +8,8 @@ public class GuideRaycast : MonoBehaviour
     [SerializeField] private RaycastMode mode;
     [SerializeField] private LayerMask mask;
     [SerializeField] private float distance = 10f;
+    [SerializeField] private GameObject genPanel;
+    [SerializeField] private GameObject furnitureButton;
     [SerializeField] private GameObject guideCanvas;
     [SerializeField] private GameObject guideButton;
     [SerializeField] private GameObject quitButton;
@@ -45,10 +47,14 @@ public class GuideRaycast : MonoBehaviour
 
         if (guideOn) {
             guideCanvas.SetActive(true);
+            furnitureButton.SetActive(true);
+            genPanel.SetActive(false);
             quitButton.SetActive(true);
         }
         else {
             guideCanvas.SetActive(false);
+            furnitureButton.SetActive(false);
+            genPanel.SetActive(true);
             quitButton.SetActive(false);
         }
     }

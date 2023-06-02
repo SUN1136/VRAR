@@ -6,7 +6,7 @@ using UnityEngine.EventSystems;
 
 
 public class ColorRaycast : MonoBehaviour
-{  
+{
     public int rayLength = 10;
     public float delay = 0.1f;
     public Material lineMaterial;
@@ -15,10 +15,11 @@ public class ColorRaycast : MonoBehaviour
     [SerializeField] private Color colorHold = Color.clear;
     [SerializeField] private int? textureHold = null;
     [SerializeField] private InputLinker inputLinker;
-    [SerializeField] private LayerMask UIMask, FurnitureMask;
+    [SerializeField] private LayerMask mask;
     [SerializeField] private bool showLine = false;
+    [SerializeField] private bool isTriggered;
     [SerializeField] private RaycastMode mode;
-    
+
     private Color[] rgbColorList = {
         new Color(224/255f, 123/255f, 57/255f, 1),
         new Color(218/255f, 87/255f, 53/255f, 1),
@@ -52,21 +53,26 @@ public class ColorRaycast : MonoBehaviour
     };
 
 
-    Color angle2colorRGB(float angle){
+    Color angle2colorRGB(float angle)
+    {
         int index = (int)Math.Truncate((angle / 18));
         return rgbColorList[index];
     }
 
-    Color angle2colorGrey(float angle){
-        if (angle < 90){
+    Color angle2colorGrey(float angle)
+    {
+        if (angle < 90)
+        {
             angle = 360 + angle;
         }
         int index = (int)Math.Truncate(((angle - 90) / 120));
         return greyColorList[index];
     }
 
-    int angle2textureNum(float angle){
-        if (angle < 30){
+    int angle2textureNum(float angle)
+    {
+        if (angle < 30)
+        {
             angle = 360 + angle;
         }
         int index = (int)Math.Truncate(((angle - 30) / 120));
@@ -75,102 +81,119 @@ public class ColorRaycast : MonoBehaviour
 
     void Start()
     {
-        
+
     }
 
     void Update()
     {
         RaycastHit hit;
 
-        if (!mode.existObject){
+        if (!mode.existObject)
+        {
             Ray ray = new Ray(transform.position, transform.forward);
 
-            if (Physics.Raycast(ray, out hit, rayLength * 10, UIMask)){ // Collision Exists
-                if (hit.collider == colorPalette.GetComponent<Collider>() && inputLinker.rightTrigger && colorHold == Color.clear && textureHold == null){
-                    Vector3 direction_x_axis = colorCanvas.transform.right;
-                    Vector3 direction_z_axis = colorCanvas.transform.forward;
-                    Vector3 direction = hit.point - colorCanvas.transform.position;
-
-                    float theta = Mathf.Rad2Deg * Mathf.Acos(Vector3.Dot(direction_x_axis, direction) / (direction.magnitude * direction_x_axis.magnitude));
-                    bool isPositiveAngle = Vector3.Dot(Vector3.Cross(direction_x_axis, direction), direction_z_axis) > 0;
-
-                    theta = isPositiveAngle ? theta : 360 - theta;
-
-                    Debug.Log(direction.magnitude);
-                    
-                    if (direction.magnitude < 0.475 * 0.333 * 0.2624671916){
-                        textureHold = angle2textureNum(theta);
-                    }
-                    else if (direction.magnitude < 0.475 * 0.333 * 0.51282051282){
-                        colorHold = angle2colorGrey(theta);
-                    }
-                    else if (direction.magnitude >= 0.475 * 0.333 * 0.51282051282 && direction.magnitude < 0.475 * 0.333)
+            if (Physics.Raycast(ray, out hit, rayLength * 10, mask))
+            { // Collision Exists
+                if (hit.collider.gameObject.layer == 5)
+                {
+                    if (hit.collider == colorPalette.GetComponent<Collider>() && !isTriggered && inputLinker.rightTrigger && colorHold == Color.clear && textureHold == null)
                     {
-                        colorHold = angle2colorRGB(theta);
-                    }
-                }
-                
-                Vector3 v1 = transform.position;
-                v1 = transform.TransformPoint(Vector3.forward * rayLength);
-                
-                if (showLine) {
-                    GameObject myLine = new GameObject();
-                    myLine.transform.position = transform.position;
-                    myLine.AddComponent<LineRenderer>();
+                        Vector3 direction_x_axis = colorCanvas.transform.right;
+                        Vector3 direction_z_axis = colorCanvas.transform.forward;
+                        Vector3 direction = hit.point - colorCanvas.transform.position;
 
-                    LineRenderer lr = myLine.GetComponent<LineRenderer>();
-                    lr.material = lineMaterial;
-                    lr.startWidth = 0.01f;
-                    lr.endWidth = 0.01f;
-                    lr.SetPosition(0, transform.position);
-                    lr.SetPosition(1, hit.point);
-                    GameObject.Destroy(myLine, delay);
-                }
-            }
-            else if (Physics.Raycast(ray, out hit, rayLength * 10, FurnitureMask)){
-                if (!inputLinker.rightTrigger && (colorHold != Color.clear || textureHold != null)){
-                    Renderer renderer = hit.collider.gameObject.GetComponent<MeshRenderer>();
-                    if (colorHold != Color.clear){
-                        renderer.material = new Material(shader: Shader.Find("Diffuse"));
-                        renderer.material.color = colorHold;
-                        colorHold = Color.clear;
-                    }
-                    else {
-                        GameObject furniture = hit.collider.gameObject.transform.parent.gameObject;
-                        Material textureMaterial = (Material)Resources.Load("Materials/" + furniture.name + "_" + textureHold.ToString(), typeof(Material));
-                        
-                        for (int i=0; i< furniture.transform.childCount; i++) {
-                            GameObject child = furniture.transform.GetChild(i).gameObject;
-                            child.GetComponent<MeshRenderer>().material = textureMaterial;
+                        float theta = Mathf.Rad2Deg * Mathf.Acos(Vector3.Dot(direction_x_axis, direction) / (direction.magnitude * direction_x_axis.magnitude));
+                        bool isPositiveAngle = Vector3.Dot(Vector3.Cross(direction_x_axis, direction), direction_z_axis) > 0;
+
+                        theta = isPositiveAngle ? theta : 360 - theta;
+
+                        Debug.Log(direction.magnitude);
+
+                        if (direction.magnitude < 0.475 * 0.333 * 0.2624671916)
+                        {
+                            textureHold = angle2textureNum(theta);
                         }
+                        else if (direction.magnitude < 0.475 * 0.333 * 0.51282051282)
+                        {
+                            colorHold = angle2colorGrey(theta);
+                        }
+                        else if (direction.magnitude >= 0.475 * 0.333 * 0.51282051282 && direction.magnitude < 0.475 * 0.333)
+                        {
+                            colorHold = angle2colorRGB(theta);
+                        }
+                    }
 
-                        textureHold = null;
+                    Vector3 v1 = transform.position;
+                    v1 = transform.TransformPoint(Vector3.forward * rayLength);
+
+                    if (showLine)
+                    {
+                        GameObject myLine = new GameObject();
+                        myLine.transform.position = transform.position;
+                        myLine.AddComponent<LineRenderer>();
+
+                        LineRenderer lr = myLine.GetComponent<LineRenderer>();
+                        lr.material = lineMaterial;
+                        lr.startWidth = 0.01f;
+                        lr.endWidth = 0.01f;
+                        lr.SetPosition(0, transform.position);
+                        lr.SetPosition(1, hit.point);
+                        GameObject.Destroy(myLine, delay);
                     }
                 }
+                else if (hit.collider.gameObject.layer == 6)
+                {
+                    if (!inputLinker.rightTrigger && (colorHold != Color.clear || textureHold != null))
+                    {
+                        Renderer renderer = hit.collider.gameObject.GetComponent<MeshRenderer>();
+                        if (colorHold != Color.clear)
+                        {
+                            renderer.material = new Material(shader: Shader.Find("Diffuse"));
+                            renderer.material.color = colorHold;
+                            colorHold = Color.clear;
+                        }
+                        else
+                        {
+                            GameObject furniture = hit.collider.gameObject.transform.parent.gameObject;
+                            Material textureMaterial = (Material)Resources.Load("Materials/" + furniture.name + "_" + textureHold.ToString(), typeof(Material));
 
-                Vector3 v1 = transform.position;
-                v1 = transform.TransformPoint(Vector3.forward * rayLength);
+                            for (int i = 0; i < furniture.transform.childCount; i++)
+                            {
+                                GameObject child = furniture.transform.GetChild(i).gameObject;
+                                child.GetComponent<MeshRenderer>().material = textureMaterial;
+                            }
 
-                if (showLine) {
-                    GameObject myLine = new GameObject();
-                    myLine.transform.position = transform.position;
-                    myLine.AddComponent<LineRenderer>();
+                            textureHold = null;
+                        }
+                    }
 
-                    LineRenderer lr = myLine.GetComponent<LineRenderer>();
-                    lr.material = lineMaterial;
-                    lr.startWidth = 0.01f;
-                    lr.endWidth = 0.01f;
-                    lr.SetPosition(0, transform.position);
-                    lr.SetPosition(1, hit.point);
-                    GameObject.Destroy(myLine, delay);
+                    Vector3 v1 = transform.position;
+                    v1 = transform.TransformPoint(Vector3.forward * rayLength);
+
+                    if (showLine)
+                    {
+                        GameObject myLine = new GameObject();
+                        myLine.transform.position = transform.position;
+                        myLine.AddComponent<LineRenderer>();
+
+                        LineRenderer lr = myLine.GetComponent<LineRenderer>();
+                        lr.material = lineMaterial;
+                        lr.startWidth = 0.01f;
+                        lr.endWidth = 0.01f;
+                        lr.SetPosition(0, transform.position);
+                        lr.SetPosition(1, hit.point);
+                        GameObject.Destroy(myLine, delay);
+                    }
                 }
             }
-            else { // No Collision
+            else
+            { // No Collision
 
                 Vector3 v1 = transform.position;
                 v1 = transform.TransformPoint(Vector3.forward * rayLength);
 
-                if (showLine) {
+                if (showLine)
+                {
                     GameObject myLine = new GameObject();
                     myLine.transform.position = transform.position;
                     myLine.AddComponent<LineRenderer>();
@@ -185,17 +208,21 @@ public class ColorRaycast : MonoBehaviour
                 }
             }
 
-            if (!inputLinker.rightTrigger){
+            if (!inputLinker.rightTrigger)
+            {
                 colorHold = Color.clear;
                 textureHold = null;
             }
         }
 
-        if (colorHold == Color.clear && textureHold == null) {
+        if (colorHold == Color.clear && textureHold == null)
+        {
             mode.existColor = false;
         }
-        else {
+        else
+        {
             mode.existColor = true;
         }
+        isTriggered = inputLinker.rightTrigger;
     }
 }
